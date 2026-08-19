@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { SESSION_COOKIE_NAME } from "@/lib/auth";
+import { getServerSession } from "@/lib/auth";
 
-export function middleware(req: NextRequest) {
-  const hasCookie = req.cookies.has(SESSION_COOKIE_NAME);
-  if (!hasCookie) {
+export async function proxy(req: NextRequest) {
+  const session = await getServerSession();
+  if (!session) {
     const loginUrl = new URL("/login", req.url);
     return NextResponse.redirect(loginUrl);
   }
