@@ -4,7 +4,12 @@ import { getModulesForTest, isInScope } from "@/lib/testRegistry";
 import { getServerSession } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
-  const session = await getServerSession(req);
+  // NextAuth v5: auth() reads the request context Next.js already provides —
+  // no argument needed here (this differs from a plain req.headers-based
+  // check some older auth patterns used). Verify this against your installed
+  // next-auth version's types if this errors; the API has shifted across
+  // v5 betas.
+  const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
