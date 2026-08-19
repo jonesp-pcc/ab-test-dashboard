@@ -1,19 +1,40 @@
-import NextAuth from "next-auth";
-import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
+import { cookies } from "next/headers";
+import { createHmac, timingSafeEqual } from "crypto";
 
-export const { handlers, auth } = NextAuth({
-  providers: [
-    MicrosoftEntraID({
-      clientId: process.env.ENTRA_CLIENT_ID!,
-      clientSecret: process.env.ENTRA_CLIENT_SECRET!,
-      issuer: process.env.ENTRA_ISSUER!,
-    }),
-  ],
-});
+const COOKIE_NAME = "dashboard_session";
 
-// middleware.ts needs a plain `auth` export (used directly as the
-// middleware function itself). Route handlers use this same function
-// under a clearer name — it was previously exported ONLY as
-// `getServerSession`, which middleware.ts's `{ auth as middleware }`
-// import couldn't resolve. Both names now point at the same function.
-export const getServerSession = auth;
+function expectedToken(): string {
+  const secret = process.env.AUTH_SECRET;
+  if (!secret) throw new Error("AUTH_SECRET is not set");
+  return createHmac("sha256", secret).update("authenticated").digest("hex");
+}
+
+export function checkPassword(submitted: string): boolean {
+  const actual = process.env.DASHBOARD_PASSWORD;
+  if (!actual) throw new Error("DASHBOARD_PASSWORD is not set");
+  const a = Buffer.from(submitted);
+  const b = Buffer.from(actual);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+export function sessionCookieValue(): string {
+  return expectedToken();
+}
+
+export const SESSION_COOKIE_NAME = COOKIE_NAME;
+
+export async function getServerSession(): Promise<{ authenticated: true } | null> {
+  const store = await cookies();
+  const token = store.get(COOKIE_NAME)?.value;
+  if (!token) return null;
+  try {
+    const expected = expectedToken();
+    const a = Buffer.from(token);
+    const b = Buffer.from(expected);
+    if (a.length !== b.length) return null;
+    return timingSafeEqual(a, b) ? { authenticated: true } : null;
+  } catch {
+    return null;
+  }
+}
