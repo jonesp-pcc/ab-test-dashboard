@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "pcc-marketing-analytics-prod",
+  "private_key_id": "4b209058312043ab6e6dd98577086a5dc1d74c2d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCz7YUqVT530mdQ\nihIUXceFP/42qbuZg1SZfP7yvGrtH6qlCbOIa6WlilDlM8P5hJyf61HKtJn/dEeS\n77868xM7tGB3MgOkUv8c6kcWQD5ITmWiwpVMqe8ynVi9tEZZPDLjugRa1Dmb2ktp\nssU+vAfgmZpo4mtJMiqmcG2sBNW+pYan5rC/3mIJ8uAwv/kFtB5tCayZiGjToddg\njOOX+ogXmO1Rx0LU8/GfaAbPpnmt6af2VMNApIbUW3oSzIs1+xO1DoIlbIxzFP1I\na/yYCdpBJ1bhkD1Tw6itnYjhzuCt/O1wCIWWQF5CwxvWXC9tuAOzLP9gyy/1Eu74\nDM815FOdAgMBAAECggEABxBjMwdHvZKQJdRV42DPLYcWpvTA/cTvNFt48vS8yfR9\nUZ9w4gE/7qDgji8bGZfAQnMNsgSnKyVYjgdFnb3fWm+5fdSD2ha8F1mHUvNQvqv9\nR4eWLv1Y+8a7ri7+uBAp+1DZTOuaG2lVnp+7KLxfHs1JB6ckCSqkDAbL9331Glf6\nX+tHik1SHwM5/xGKbt0AJJhf3qzgllgI+EpNtAr7txdSNA3qLb2+Chwutoc9AivY\neObEoPyhy3v1cHJeYZ0tFExnsKrvzgUHu3840f/2wLY63lbB67hQQrg0kHUOKHJN\nsEjN/jIfNekxV/By3x+2TH5s8CrPoCQg/bxArfViLQKBgQDupWsvUp2it4EEwFSL\nSdGl1DvztL5CJxWfk09ZPivu12HhUGDQ1GGjX+OTx8K7f9gFSMbMdw90012i62BX\nb9sVRXNmSuvXbHRyVXjTvOTt+fWxxMRaYxb8bR5KZrWtnd3RkmYstfDVgCRLTiPl\nrfspnUxksVd6zZ7Nclc5PjEV2wKBgQDBAwOrDqWxQpcqtQSATJs7cqVH9lNtfgWS\nAtdCrhw6hkF27MsC5px512x9G8sdQZWZ2Rv9YONLgBIlHhbaVHJOe2XH32pGF/Sj\n+CDLzm4s+2Fxt3LQFo8GfYpb9wHbQjiQ6Z+7kzDZcnypndS2cJTQHZDdr5ORCtLW\nN+FSfTdB5wKBgCxd5IdvvI67vui7OPyMRMWnp12vhI+X5JU+NcpJnLFSqYfSAa3R\nTjWpZg3bXYCuS+LvnMX2fJEjmoznZYnb6ccSmlmyJBZwu1VmPohe3dDAX8Uk57xG\nH8feIXuDjNMyPkLwDL7TNGr838KATHwu1DrwW3t83N6fy542W7Dwtv9xAoGAaeYz\nfwlcU/PLaT1EqPhfO7DdiqxWff7lI4W3gfhxuJKtHIkzofXR6PAPsF0thnHTmUQM\nHWupimVMj10BAO3QgcsmvxGQB8FhEw4zQF+VB80tW+1ha1bVRqRe47KVLC4bRzdH\n0u0hok00pQPaD/eZTs7KCzgoaS5dG/gxAsd9KAUCgYEAzBPFcxXuTGRebmynMnF6\nemnaqbb+cUiJFWqWRBdKfB1MhG7MJE3eYMRcXVmo6KSXZ0Qxes5Ywd0B0HN86jGA\nOS9NOO91Ku3vmWxux/dQHuPpxdu8/Uzq2eiaHvd3gXrLCP9YwC9nH1QzernvvpDC\nlSaB7NaQ+YQsiUVEC8QqLpI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "ab-dashboard-reader@pcc-marketing-analytics-prod.iam.gserviceaccount.com",
+  "client_id": "114837013380610556808",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/ab-dashboard-reader%40pcc-marketing-analytics-prod.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
