@@ -14,6 +14,23 @@ function getBigQueryClient() {
 
 const bigquery = getBigQueryClient();
 
+// The @google-cloud/bigquery client returns DATE columns as a BigQueryDate
+// object ({ value: "2026-08-14" }), not a plain string — even though the
+// column is typed `string` everywhere in this app. Left unconverted, this
+// object survives NextResponse.json() as a plain { value: "..." } object,
+// and anything downstream calling .slice()/.split() on it (expecting a
+// string) throws at runtime, not at compile time — my earlier type-check
+// against a minimal stub couldn't catch this, since the stub didn't model
+// BigQuery's actual return shape for DATE. Normalize every row's
+// session_date to a plain string here, once, so nothing downstream (the
+// API route, page.tsx) needs to know about BigQueryDate at all.
+function normalizeDate(row: any): any {
+  if (row?.session_date && typeof row.session_date === "object" && "value" in row.session_date) {
+    return { ...row, session_date: row.session_date.value };
+  }
+  return row;
+}
+
 export async function getTestPerformance(testId: string, startDate: string, endDate: string) {
   const query = `
     SELECT
@@ -27,7 +44,7 @@ export async function getTestPerformance(testId: string, startDate: string, endD
     ORDER BY session_date
   `;
   const [rows] = await bigquery.query({ query, params: { testId, startDate, endDate } });
-  return rows;
+  return rows.map(normalizeDate);
 }
 
 export async function getProductMix(testId: string, startDate: string, endDate: string) {
@@ -38,7 +55,7 @@ export async function getProductMix(testId: string, startDate: string, endDate: 
     ORDER BY session_date, item_name
   `;
   const [rows] = await bigquery.query({ query, params: { testId, startDate, endDate } });
-  return rows;
+  return rows.map(normalizeDate);
 }
 
 export async function getUpsellDiagnostics(testId: string, startDate: string, endDate: string) {
@@ -51,7 +68,7 @@ export async function getUpsellDiagnostics(testId: string, startDate: string, en
     ORDER BY session_date
   `;
   const [rows] = await bigquery.query({ query, params: { testId, startDate, endDate } });
-  return rows;
+  return rows.map(normalizeDate);
 }
 
 export async function listAvailableTests() {

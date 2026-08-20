@@ -37,10 +37,10 @@ export function buildFunnel(agg: FunnelRow): FunnelStep[] {
   const steps: { key: string; label: string; sessions: number }[] = [
     { key: "sessions", label: "Sessions", sessions: agg.sessions },
     { key: "add_to_cart_sessions", label: "Added to cart", sessions: agg.add_to_cart_sessions },
-    { key: "purchase_redirect_sessions", label: "Redirected to purchase", sessions: agg.purchase_redirect_sessions },
-    { key: "begin_checkout_sessions", label: "Began checkout", sessions: agg.begin_checkout_sessions },
-    { key: "add_payment_info_sessions", label: "Added payment info", sessions: agg.add_payment_info_sessions },
-    { key: "conversions", label: "Converted", sessions: agg.conversions },
+    { key: "purchase_redirect_sessions", label: "Book Now", sessions: agg.purchase_redirect_sessions },
+    { key: "begin_checkout_sessions", label: "Begin checkout", sessions: agg.begin_checkout_sessions },
+    { key: "add_payment_info_sessions", label: "Add payment info", sessions: agg.add_payment_info_sessions },
+    { key: "conversions", label: "Purchase", sessions: agg.conversions },
   ];
 
   return steps.map((step, i) => {

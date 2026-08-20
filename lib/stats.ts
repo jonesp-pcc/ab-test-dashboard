@@ -81,3 +81,66 @@ export function welchTestRPS(a: RevenueAgg, b: RevenueAgg): StatTestResult | nul
     ciLow: diff - 1.96 * se, ciHigh: diff + 1.96 * se,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Sample Ratio Mismatch (SRM) — chi-square goodness-of-fit test.
+//
+// Compares observed session counts per variant against the intended
+// allocation. A significant result (p < 0.05, conventionally p < 0.001 for
+// SRM) means bucketing wasn't balanced, so CVR comparisons may be biased by
+// population differences rather than the treatments — the result should be
+// treated as indicative, not certifiable.
+//
+// For Test 5: Antique (the plan's 5%) is not present in BigQuery, so the
+// plan's 5 / 23.75 / 23.75 / 23.75 / 23.75 split renormalizes to an even
+// 25% each across the four in-BQ variants (v4.0-v4.3). Pass whatever
+// expected proportions apply; they must sum to 1 and align with `observed`.
+// ---------------------------------------------------------------------------
+
+export interface SrmResult {
+  chiSquare: number;
+  df: number;
+  p: number;
+  mismatch: boolean; // true if p < 0.05
+  rows: {
+    label: string;
+    observed: number;
+    expected: number;
+    share: number;
+    delta: number;
+  }[];
+}
+
+// Chi-square survival function via the Wilson-Hilferty normal approximation.
+// Accurate enough for flagging SRM; not a substitute for an exact CDF at the
+// extreme tails, but SRM decisions live around p≈0.05/0.001 where it's fine.
+function chiSquareP(chi: number, df: number): number {
+  if (chi <= 0) return 1;
+  const x = chi / df;
+  const z = (Math.cbrt(x) - (1 - 2 / (9 * df))) / Math.sqrt(2 / (9 * df));
+  return 1 - normCdf(z);
+}
+
+export function srmTest(
+  observed: { label: string; sessions: number }[],
+  expectedProportions: number[],
+): SrmResult | null {
+  if (!observed.length || observed.length !== expectedProportions.length) return null;
+  const total = observed.reduce((s, o) => s + o.sessions, 0);
+  if (!total) return null;
+  let chiSquare = 0;
+  const rows = observed.map((o, i) => {
+    const expected = total * expectedProportions[i];
+    chiSquare += expected > 0 ? Math.pow(o.sessions - expected, 2) / expected : 0;
+    return {
+      label: o.label,
+      observed: o.sessions,
+      expected,
+      share: o.sessions / total,
+      delta: o.sessions - expected,
+    };
+  });
+  const df = observed.length - 1;
+  const p = chiSquareP(chiSquare, df);
+  return { chiSquare, df, p, mismatch: p < 0.05, rows };
+}
